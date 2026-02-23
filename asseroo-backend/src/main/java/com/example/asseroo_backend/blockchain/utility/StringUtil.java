@@ -1,5 +1,4 @@
-package utility;
-
+package com.example.asseroo_backend.blockchain.utility;
 import java.security.MessageDigest;
 
 public class StringUtil {
