@@ -6,26 +6,27 @@ public class Block{
     public String hash;
     public String previousHash;
     private String sender;
-    private String reciever;
+    private String reciepient;
     private long timeStamp;
     private String data;
     private int nonce;
 
-    public Block(String data, String previousHash, String sender, String reciever) {
-        this.data = data;
+    public Block(String data, String previousHash, String sender, String reciepient) {
+
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
         this.hash = calculateHash();
 	}
 
-    public String calculateHash() {
-        String calculatedhash = StringUtil.applySha256( 
-                previousHash +
-                Long.toString(timeStamp) +
-                data 
-                );
-        return calculatedhash;
-    }
+	public String calculateHash() {
+		String calculatedhash = StringUtil.applySha256( 
+				previousHash +
+				Long.toString(timeStamp) +
+				Integer.toString(nonce) + 
+				merkleRoot
+				);
+		return calculatedhash;
+	}
 
     public void mineBlock(int difficulty){
         String target = new String(new char[difficulty]).replace('\0', '0');
@@ -37,4 +38,19 @@ public class Block{
         System.out.println("Block mined:" + hash);
     }
 
+    public boolean addTransaction(Transaction transaction){
+        if(transaction == null) return false;
+
+        if(previousHash != "0"){
+            if(transaction.processTransaction != true){
+                System.out.println("Transaction not processed");
+                return false;
+            }
+
+            transactions.add(transaction);
+            System.out.println("Transaction not processed");
+
+            return true;
+        }
+    }
 }
