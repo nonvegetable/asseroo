@@ -1,6 +1,7 @@
 package com.example.asseroo_backend.blockchain;
 
 import com.example.asseroo_backend.blockchain.utility.StringUtil;
+import com.example.asseroo_backend.blockchain.TransactionOutput;
 
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
@@ -8,15 +9,17 @@ import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.security.Security;
 import java.util.Base64;
+import java.util.HashMap;
 
 @Component
 public class AsserooChain {
 
     public static ArrayList<Block> chain = new ArrayList<>();
-    public static HashMap<String,TransactionOutputs> UTXOs = new HashMap<String,TransactionOutputs>();
+    public static HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
     private int difficulty = 5;
     public static Wallet walletA;
     public static Wallet walletB;
+    public static float minimumTransaction = 0.1f;
 
     @PostConstruct
     public void init() {

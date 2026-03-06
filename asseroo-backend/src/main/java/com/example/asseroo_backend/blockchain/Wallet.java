@@ -2,10 +2,14 @@ package com.example.asseroo_backend.blockchain;
 
 import com.example.asseroo_backend.blockchain.utility.StringUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.security.spec.ECGenParameterSpec;
 import java.security.*;
 
 public class Wallet{
-    public PrivateKey privatekey;
+    public PrivateKey privateKey;
     public PublicKey publicKey;
 
     public Wallet(){
@@ -31,11 +35,12 @@ public class Wallet{
 
     public float getBalance(){
         float total = 0;
-        for(Map.Entry<String, TransactionOutput> item : chain.UTXOs.entrySet()){
-            TransactionOutput.UTXO = item.getValue();
-            if(UTXO.isMine()){
-                UTXOs.put(UTXO.id, UTXO);
-                total += UTXO.value;
+
+        for(Map.Entry<String, TransactionOutput> item : AsserooChain.UTXOs.entrySet()){
+            TransactionOutput utxo = item.getValue();
+
+            if(utxo.isMine(publicKey)){
+                total += utxo.value;
             }
         }
 
@@ -43,7 +48,7 @@ public class Wallet{
     }
 
     public Transaction sendFunds(PublicKey _recipient, float value){
-        if(getBalance < value){
+        if(getBalance() < value){
             System.out.println("There are not enough funds to transact");
             return null;
         }
@@ -52,18 +57,18 @@ public class Wallet{
 
         float total = 0;
 
-        for (Map.Entry<String, TransactionOutput> item: UTXOs.entrySet()){
+        for (Map.Entry<String, TransactionOutput> item: AsserooChain.UTXOs.entrySet()){
             TransactionOutput UTXO = item.getValue();
-            total += UTXO.value;
-            inputs.add(new TransactionInput(UTXO.id));
-            if(total > value) break;
-		}
+            if(UTXO.isMine(publicKey)){
+                total += UTXO.value;
+            }
+        }
 		
 		Transaction newTransaction = new Transaction(publicKey, _recipient , value, inputs);
 		newTransaction.generateSignature(privateKey);
 		
 		for(TransactionInput input: inputs){
-			UTXOs.remove(input.transactionOutputId);
+			AsserooChain.UTXOs.remove(input.transactionOutputId);
 		}
 		return newTransaction;
 

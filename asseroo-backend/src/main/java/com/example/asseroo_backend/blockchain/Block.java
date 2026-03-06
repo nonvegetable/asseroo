@@ -1,6 +1,9 @@
 package com.example.asseroo_backend.blockchain;
+
 import com.example.asseroo_backend.blockchain.utility.StringUtil;
+
 import java.util.Date;
+import java.util.ArrayList;
 
 public class Block{
     public String hash;
@@ -10,6 +13,9 @@ public class Block{
     private long timeStamp;
     private String data;
     private int nonce;
+
+    private String merkleRoot;
+    private ArrayList<Transaction> transactions = new ArrayList<>();
 
     public Block(String data, String previousHash, String sender, String reciepient) {
 
@@ -42,7 +48,7 @@ public class Block{
         if(transaction == null) return false;
 
         if(previousHash != "0"){
-            if(transaction.processTransaction != true){
+            if(transaction.processTransaction() != true){
                 System.out.println("Transaction not processed");
                 return false;
             }
@@ -52,5 +58,7 @@ public class Block{
 
             return true;
         }
+
+        return true;
     }
 }

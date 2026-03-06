@@ -1,5 +1,14 @@
 package com.example.asseroo_backend.blockchain.utility;
+
+import com.example.asseroo_backend.blockchain.Wallet;
+import com.example.asseroo_backend.blockchain.Transaction;
+
 import java.security.MessageDigest;
+import java.security.*;
+import java.util.Base64;
+import java.util.ArrayList;
+
+
 
 public class StringUtil {
 	//Applies Sha256 to a string and returns the result. 

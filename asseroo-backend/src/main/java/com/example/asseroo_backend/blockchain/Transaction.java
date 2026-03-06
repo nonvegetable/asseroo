@@ -18,13 +18,13 @@ public class Transaction{
     public static int sequence = 0;
 
     public Transaction(PublicKey from, PublicKey to, float value, ArrayList<TransactionInput> inputs){
-        this.from = from;
-        this.to = to;
+        this.sender = from;
+        this.reciepient = to;
         this.value = value;
         this.inputs = inputs;
     }
 
-    private String calulateHash() {
+    private String calculateHash() {
     sequence++;
     return StringUtil.applySha256(
         StringUtil.getStringFromKey(sender) +
@@ -50,7 +50,7 @@ public class Transaction{
         }
 
         for(TransactionInput i : inputs){
-            i.UTXO = AsserooChain.UTXO.get(i.transactionOutputId);
+            i.UTXO = AsserooChain.UTXOs.get(i.transactionOutputId);
         }
 
         if(getInputs() < AsserooChain.minimumTransaction){
@@ -59,9 +59,24 @@ public class Transaction{
         }
 
         float leftOver = getInputsValue() - value;
-        transactionId = calculatedHash();
+        transactionId = calculateHash();
 
-        outputs.add();
-        outputs.add()
+        outputs.add(new TransactionOutput(this.reciepient, value, transactionId));
+        outputs.add(new TransactionOutput(this.sender, leftOver, transactionId));
+
+        return true;
+    }
+
+    public float getInputsValue() {
+        float total = 0;
+        for (TransactionInput i : inputs) {
+            if (i.UTXO == null) continue;
+            total += i.UTXO.value;
+        }
+        return total;
+    }
+
+    public float getInputs() {
+        return getInputsValue();
     }
 }
