@@ -1,64 +1,60 @@
 package com.example.asseroo_backend.blockchain;
 
-import com.example.asseroo_backend.blockchain.utility.StringUtil;
+import java.time.Instant;
+import java.util.List;
 
-import java.util.Date;
-import java.util.ArrayList;
+public class Block {
+    private final int index;
+    private final String previousHash;
+    private final String hash;
+    private final String merkleRoot;
+    private final long nonce;
+    private final Instant timestamp;
+    private final List<Transaction> transactions;
 
-public class Block{
-    public String hash;
-    public String previousHash;
-    private String sender;
-    private String reciepient;
-    private long timeStamp;
-    private String data;
-    private int nonce;
-
-    private String merkleRoot;
-    private ArrayList<Transaction> transactions = new ArrayList<>();
-
-    public Block(String data, String previousHash, String sender, String reciepient) {
-
+    public Block(
+            int index,
+            String previousHash,
+            String hash,
+            String merkleRoot,
+            long nonce,
+            Instant timestamp,
+            List<Transaction> transactions
+    ) {
+        this.index = index;
         this.previousHash = previousHash;
-        this.timeStamp = new Date().getTime();
-        this.hash = calculateHash();
-	}
-
-	public String calculateHash() {
-		String calculatedhash = StringUtil.applySha256( 
-				previousHash +
-				Long.toString(timeStamp) +
-				Integer.toString(nonce) + 
-				merkleRoot
-				);
-		return calculatedhash;
-	}
-
-    public void mineBlock(int difficulty){
-        String target = new String(new char[difficulty]).replace('\0', '0');
-        while(!hash.substring(0, difficulty).equals(target)){
-            nonce++;
-            hash = calculateHash();
-        }
-
-        System.out.println("Block mined:" + hash);
+        this.hash = hash;
+        this.merkleRoot = merkleRoot;
+        this.nonce = nonce;
+        this.timestamp = timestamp;
+        this.transactions = List.copyOf(transactions);
     }
 
-    public boolean addTransaction(Transaction transaction){
-        if(transaction == null) return false;
+    public int getIndex() {
+        return index;
+    }
 
-        if(previousHash != "0"){
-            if(transaction.processTransaction() != true){
-                System.out.println("Transaction not processed");
-                return false;
-            }
+    public String getPreviousHash() {
+        return previousHash;
+    }
 
-            transactions.add(transaction);
-            System.out.println("Transaction not processed");
+    public String getHash() {
+        return hash;
+    }
 
-            return true;
-        }
+    public String getMerkleRoot() {
+        return merkleRoot;
+    }
 
-        return true;
+    public long getNonce() {
+        return nonce;
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 }

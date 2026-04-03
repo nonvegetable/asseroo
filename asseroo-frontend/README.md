@@ -1,21 +1,28 @@
-# React + TypeScript + Vite + shadcn/ui
+# Asseroo Frontend
 
-This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
+React + JavaScript frontend for Aadhaar-based vehicle ownership transfer.
 
-## Adding components
+## Features
 
-To add components to your app, run the following command:
+- Aadhaar register/login flow (12-digit validation)
+- Vehicle registration by Indian registration number (example: `KA01AB1234`)
+- Vehicle transfer between Aadhaar numbers
+- Dashboard for owned vehicles + on-chain activity
+- HeroUI components with a pastel, rounded UI
+- Axios integration with Spring backend APIs
+
+## Run
 
 ```bash
-npx shadcn@latest add button
+npm install
+npm run dev
 ```
 
-This will place the ui components in the `src/components` directory.
+To build production assets:
 
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button"
+```bash
+npm run build
 ```
+
+Frontend expects backend on `http://localhost:8080/api`.
+You can override with `VITE_API_BASE_URL`.
